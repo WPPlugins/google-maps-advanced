@@ -1,0 +1,148 @@
+
+Google Maps plugin homepage:
+http://avi.alkalay.net/2006/11/google-maps-plugin-for-wordpress.html
+
+License: LGPL
+
+Author: Avi Alkalay (insipired by previous work by Macdiggs)
+$Id: README 107400 2009-04-03 10:27:56Z avibrazil $
+
+
+Notes:
+	- Google Maps API v.2 is used
+	- Your site should be UTF-8 encoded (although the plugin SHOULD work for other encodings)
+		There is a problem with IE for Windows on Japanese Windows systems when page
+		encoding is not set to UTF-8, but to ShiftJIS (errors, map is not loaded). Switch
+		your page encoding to UTF-8 to fix the problem.
+
+Using:
+	On the post editor:
+	1. write some text, glue some image
+	2. select it and create a regular link
+	3. if you manually edit the <a> tag putting class="something" or
+	   style="somestyle", these attributes will be inherited by the map
+	4. on the Title field of the Create Link dialog put "googlemap" and some
+	   controls separated by ';'
+	5. For compatibility with other plugins, you can also use the rel=""
+	   attribute instead of title="". You'll have to manually edit the HTML
+	   though.
+
+	Other controls are:
+	w:SOMEWIDTH or w:SOMEWIDTH%
+	h:SOMEHEIGHT or h:SOMEHEIGHT%
+	nocontrols
+	nomarker
+
+	Examples for the Title (or rel) field:
+	googlemap;w:300;h:500 (renders a 300x500 map with controls and marker)
+	googlemap;w:500;nomarker (renders a 500xDEFAULTHEIGHT map with controls and no marker)
+	googlemap;w:300;h:500;nomarker;nocontrols (renders a 300x500 map without controls nor marker)
+
+
+
+
+
+Using on complex maps:
+
+1. Create a definition list (<dl>) and put map-related commands and parameters on title= attribute as specified above.
+2. First definition term (<dt>, first green line) must contain only a link to Google Maps site, to define its center and other map parameters. The text for the link is ignored when a map is generated, so use a text like “Center of Map” so people accessing your posts outside your blog (for exemple, through feed readers) will have a clue what is this link for.
+3. The rest is a pair of terms and definitions (<dt> and <dd>) with the marker position (as a Google Maps URL) and the text on the balloon respectivelly.
+4. You can create a balloonless markers specifying only a <dt> without a <dd>.
+5. Whatever you put inside the <dd> block will appear inside the balloon. Put links, images, lists, tables, etc.
+
+
+-------
+
+Installing on any page, without the Wordpress plugin
+
+Make sure you have this inside your <head> block:
+
+
+	<!-- Google Maps Plugin (begin) -->
+	<!-- http://avi.alkalay.net/2006/11/google-maps-plugin-for-wordpress.html -->
+
+	<!-- Google Maps API -->
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=YOUR_API_KEY" type="text/javascript"></script>
+
+	<!-- Google Maps Plugin logic -->
+	<script src="googlemapsPlugin.js" type="text/javascript"></script>
+
+	<!-- Google Maps Plugin initialization -->
+	<script type="text/javascript">
+		//<![CDATA[
+
+		MapPluginInit(
+			500,    // Default with for maps
+			300,    // Default height for maps
+			false   // Wether to use the rel attribute instead of title
+		);
+
+		//]]>
+	</script>
+
+	<!-- Google Maps Plugin SEO -->
+	<noscript>
+		<link href="http://avi.alkalay.net/2006/11/google-maps-plugin-for-wordpress.html" rel="uses" type="text/html"/>
+	</noscript>
+	<!-- Google Maps Plugin (end) -->
+
+
+
+
+
+Version history:
+* Fri Apr 3 2009 Avi Alkalay <avi at unix dot sh> 5.12
+- Fixed a type that prevented the plugin to use the rel tag, as pointed on http://wordpress.org/support/topic/235371
+
+* Mon Oct 8 2007 Avi Alkalay <avi at unix dot sh> 5.7
+- Removed defer tag on all <script>s due to IE incompatibilities.
+
+* Sun Sep 2 2007 Avi Alkalay <avi at unix dot sh> 5.6
+- Added some SEO features.
+- Optimized <script> tags for browsers.
+
+* Sun Jul 8 2007 Avi Alkalay <avi at unix dot sh> 5.5
+- Fixed the long delays and hangs each time a map was created, related to setMapType().
+
+* Sat Jun 30 2007 Avi Alkalay <avi at unix dot sh> 5.4
+- Included an option in admin panel to let use chose if plugin should be included in header or footer of page. Some blogs reported incompatibility with footer-only.
+
+* Thu Jun 21 2007 Avi Alkalay <avi at unix dot sh> 5.3
+- Moved the initialization block to wp_footer (instead of wp_head) to speed up page loading.
+
+* Thu May 17 2007 Avi Alkalay <avi at unix dot sh> 5.2
+- Fixed a wrong comparation for visibility==hidden
+
+* Wed May 16 2007 Avi Alkalay <avi at unix dot sh> 5.1
+- Fixed an IE diversity on the window.onUnload property, as cited at http://forums.devshed.com/javascript-development-115/ie-window-onunload-returns-error-messsage-319723.html?p=1374616
+- Removed the handling of the useless sll parameter from GMaps URL.
+
+* Sat May 12 2007 Avi Alkalay <avi at unix dot sh> 5.0
+- Added support to embed My Maps and custom KML maps.
+- Methods documentation.
+- Updated homepage to explain how to embed My Maps/KML maps.
+- Included a troubleshooting guide on the homepage.
+
+* Sun Apr 01 2007 Avi Alkalay <avi at unix dot sh> 4.3
+- Changed order things happen: first collect all maps data, then start creating maps. Its faster.
+- Added support to style="visibility: hidden"
+
+	- 4.2 - Fixed a bug that prevented multiple complex maps to be rendered on same page.
+	- 4.1 - Complex maps are now based on <dl>, support to balloonless markers, added scale control
+	- 4.0 - Completely rewritten with classes, faster, lighter, more precise, and support multimarker maps
+	- 3.2 - Default location for locationless URLs
+	- 3.1 - Separated PHP and JS code. Option to use rel instead of title attrib
+	- 3.0 - Cleaner code, and map control happens on the link title attribute now
+	- 2.1 - added map size, controls display and marker display on per-map basis. as well as ability not to replace a link with google map (just set the title to "nomap")
+	- 2.0.3 - fixed problem with link arigument parsing (2006/10/19)
+	- 2.0.2 - small changes to text and such...
+	- 2.0.1 - fixed problem with google maps api key not being saved (2006/10/16)
+	- 2.0 - a complete rework of version 1.1. Most of the code is not JavaScript-driven (2006/10/15)
+
+
+
+
+
+
+
+
